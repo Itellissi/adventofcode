@@ -1,0 +1,14 @@
+plugins {
+    id 'java'
+}
+
+group = 'ocm.ite.adventofcode'
+version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+repositories {
+    mavenCentral()
+}
