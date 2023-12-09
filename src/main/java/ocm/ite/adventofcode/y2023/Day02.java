@@ -2,11 +2,6 @@ package ocm.ite.adventofcode.y2023;
 
 import ocm.ite.adventofcode.AocUtils;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 public class Day02 {
 
     public static void main(String[] args) {

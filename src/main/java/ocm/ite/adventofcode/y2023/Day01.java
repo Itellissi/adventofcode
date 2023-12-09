@@ -2,9 +2,6 @@ package ocm.ite.adventofcode.y2023;
 
 import ocm.ite.adventofcode.AocUtils;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
