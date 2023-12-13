@@ -105,7 +105,4 @@ public class Day12 {
         return arrangements;
     }
 
-
-    private record Compat(Character from, Character to, long value) {
-    }
 }
