@@ -87,7 +87,4 @@ public class Day15 {
         return hash;
     }
 
-    private record Step(String label, char lens, int focal) {
-
-    }
 }
