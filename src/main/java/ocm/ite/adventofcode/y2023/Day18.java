@@ -49,7 +49,7 @@ public class Day18 {
         var instructions = AocUtils.mapLines(inputFile, Instruction::ofLine);
         var p = createPolygon(instructions);
 
-        var result = computeArea(p);
+        var result = countPoints(p, instructions);
         System.out.println(result);
 
         var img = new BufferedImage(p.poly.getBounds().width + 3, p.poly.getBounds().height + 3, BufferedImage.TYPE_INT_RGB);
@@ -64,33 +64,30 @@ public class Day18 {
     public static void part2() {
         var instructions = AocUtils.mapLines(inputFile, Instruction::ofLinePart2);
         var p = createPolygon(instructions);
-        var result = computeArea(p);
+        var result = countPoints(p, instructions);
 
         System.out.println(result);
     }
 
+    private static long countPoints(PolygonContainer p, List<Instruction> instructions) {
+        var perimeter = instructions.stream()
+                .map(Instruction::l)
+                .reduce(Integer::sum)
+                .orElse(0);
+        return computeArea(p) + perimeter / 2 + 1;
+    }
+
     private static long computeArea(PolygonContainer p) {
-        var poly = p.poly;
         long area = 0;
-        long missing = 0;
         int n = p.points.size();
         for (int i = 0; i < n; i++) {
             var currentPoint = p.points.get(i % n);
             var nextPoint = p.points.get((i + 1) % n);
-            var mid = new Position((nextPoint.x() + currentPoint.x()) / 2, (nextPoint.y() + currentPoint.y()) / 2);
-
-            boolean containsCurrent = poly.contains(currentPoint.x(), currentPoint.y());
-            boolean containsNext = poly.contains(nextPoint.x(), nextPoint.y());
-            boolean containsMid = poly.contains(mid.x(), mid.y());
-
-            missing += containsCurrent ? 0 : 1;
-            missing += containsMid ? 0 : Math.abs(currentPoint.x() - nextPoint.x()) + Math.abs(currentPoint.y() - nextPoint.y()) - 2;
-            missing += containsNext ? 0 : 1;
 
             long delta = (long) currentPoint.x() * nextPoint.y() - (long) currentPoint.y() * nextPoint.x();
             area += delta;
         }
-        return Math.abs(area / 2) + missing - 1;
+        return Math.abs(area / 2);
     }
 
     private static PolygonContainer createPolygon(List<Instruction> instructions) {
