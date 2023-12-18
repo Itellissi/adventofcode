@@ -29,9 +29,13 @@ public record Grid<T>(T[][] data) {
     }
 
     public void print() {
+        print("");
+    }
+
+    public void print(String separator) {
         for (var row : data) {
             for (var e : row) {
-                System.out.print(e);
+                System.out.print(e + separator);
             }
             System.out.println();
         }
