@@ -74,10 +74,10 @@ public class Day19 {
         }
 
         var partsRanges = Map.of(
-                'x', Ranges.of(new Range(1, 4000)),
-                'm', Ranges.of(new Range(1, 4000)),
-                'a', Ranges.of(new Range(1, 4000)),
-                's', Ranges.of(new Range(1, 4000))
+                'x', Ranges.of(Range.of(1, 4000)),
+                'm', Ranges.of(Range.of(1, 4000)),
+                'a', Ranges.of(Range.of(1, 4000)),
+                's', Ranges.of(Range.of(1, 4000))
         );
         var accepted = new ArrayList<Map<Character, Ranges>>();
         exploreAcceptedRanges(partsRanges, workflows.get("in"), workflows, accepted);
@@ -184,9 +184,9 @@ public class Day19 {
                 return null;
             }
             if (sign > 0) {
-                return new Range(bound + 1, MAX);
+                return Range.of(bound + 1, MAX);
             }
-            return new Range(0, bound - 1);
+            return Range.of(0, bound - 1);
         }
     }
 
