@@ -97,13 +97,7 @@ public class Day19 {
     private static void exploreAcceptedRanges(Map<Character, Ranges> partsRanges, Wfw current, HashMap<String, Wfw> workflows, List<Map<Character, Ranges>> accepted) {
         List<Map.Entry<Map<Character, Ranges>, String>> partRangesToTarget = new ArrayList<>();
 
-        var currentRanges = partsRanges.entrySet()
-                .stream()
-                .map(e -> Map.entry(e.getKey(), Ranges.copy(e.getValue())))
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue
-                ));
+        var currentRanges = copyRangesMap(partsRanges);
 
         for (var condition : current.conditions) {
             var conditionRange = condition.asRange();
@@ -111,13 +105,7 @@ public class Day19 {
                 var oldRanges = currentRanges.get(condition.c);
                 var newRange = oldRanges.intersect(conditionRange);
 
-                var newPartsRanges = currentRanges.entrySet()
-                        .stream()
-                        .map(e -> Map.entry(e.getKey(), Ranges.copy(e.getValue())))
-                        .collect(Collectors.toMap(
-                                Map.Entry::getKey,
-                                Map.Entry::getValue
-                        ));
+                var newPartsRanges = copyRangesMap(currentRanges);
                 newPartsRanges.put(condition.c, Ranges.of(newRange));
                 partRangesToTarget.add(Map.entry(newPartsRanges, condition.target));
 
@@ -139,6 +127,16 @@ public class Day19 {
                 }
             }
         }
+    }
+
+    private static Map<Character, Ranges> copyRangesMap(Map<Character, Ranges> currentRanges) {
+        return currentRanges.entrySet()
+                .stream()
+                .map(e -> Map.entry(e.getKey(), Ranges.copy(e.getValue())))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue
+                ));
     }
 
 
