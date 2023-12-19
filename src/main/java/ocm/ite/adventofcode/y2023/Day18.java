@@ -2,7 +2,7 @@ package ocm.ite.adventofcode.y2023;
 
 import lombok.SneakyThrows;
 import ocm.ite.adventofcode.AocUtils;
-import ocm.ite.adventofcode.Position;
+import ocm.ite.adventofcode.Pair;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -16,19 +16,19 @@ public class Day18 {
 
     private static final String inputFile = "/input/2023/day18.txt";
 
-    private static final Position RIGHT = new Position(1, 0);
-    private static final Position LEFT = new Position(-1, 0);
-    private static final Position UP = new Position(0, -1);
-    private static final Position DOWN = new Position(0, 1);
+    private static final Pair RIGHT = new Pair(1, 0);
+    private static final Pair LEFT = new Pair(-1, 0);
+    private static final Pair UP = new Pair(0, -1);
+    private static final Pair DOWN = new Pair(0, 1);
 
-    private static final Map<String, Position> directionMapper = Map.of(
+    private static final Map<String, Pair> directionMapper = Map.of(
             "R", RIGHT,
             "L", LEFT,
             "U", UP,
             "D", DOWN
     );
 
-    private static final Map<Character, Position> directionMapper2 = Map.of(
+    private static final Map<Character, Pair> directionMapper2 = Map.of(
             '0', RIGHT,
             '2', LEFT,
             '3', UP,
@@ -91,7 +91,7 @@ public class Day18 {
     }
 
     private static PolygonContainer createPolygon(List<Instruction> instructions) {
-        var starting = new Position(0, 0);
+        var starting = new Pair(0, 0);
         int minX = 0;
         int minY = 0;
         var currentPos = starting;
@@ -100,24 +100,24 @@ public class Day18 {
             if (in.d.x() > 0) {
                 l++;
             }
-            currentPos = new Position(currentPos.x() + in.d.x() * l, currentPos.y() + in.d.y() * l);
+            currentPos = new Pair(currentPos.x() + in.d.x() * l, currentPos.y() + in.d.y() * l);
             minY = Math.min(currentPos.y(), minY);
             minX = Math.min(currentPos.x(), minX);
         }
-        starting = new Position(-minX + 1, -minY + 1);
+        starting = new Pair(-minX + 1, -minY + 1);
         var result = new PolygonContainer(new Polygon(), new ArrayList<>());
         currentPos = starting;
         result.poly.addPoint(currentPos.x(), currentPos.y());
         for (var in : instructions) {
             var l = in.l;
-            currentPos = new Position(currentPos.x() + in.d.x() * l, currentPos.y() + in.d.y() * l);
+            currentPos = new Pair(currentPos.x() + in.d.x() * l, currentPos.y() + in.d.y() * l);
             result.points.add(currentPos);
             result.poly.addPoint(currentPos.x(), currentPos.y());
         }
         return result;
     }
 
-    private record Instruction(Position d, int l) {
+    private record Instruction(Pair d, int l) {
 
         static Instruction ofLine(String s) {
             var row = s.split(" ");
@@ -138,7 +138,7 @@ public class Day18 {
         }
     }
 
-    private record PolygonContainer(Polygon poly, List<Position> points) {
+    private record PolygonContainer(Polygon poly, List<Pair> points) {
 
     }
 

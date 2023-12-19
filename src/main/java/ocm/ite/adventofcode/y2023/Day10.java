@@ -2,7 +2,7 @@ package ocm.ite.adventofcode.y2023;
 
 import ocm.ite.adventofcode.AocUtils;
 import ocm.ite.adventofcode.Grid;
-import ocm.ite.adventofcode.Position;
+import ocm.ite.adventofcode.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -10,14 +10,14 @@ import java.util.stream.IntStream;
 
 public class Day10 {
 
-    private static final List<Position> directions = List.of(
-            new Position(-1, 0),
-            new Position(1, 0),
-            new Position(0, 1),
-            new Position(0, -1)
+    private static final List<Pair> directions = List.of(
+            new Pair(-1, 0),
+            new Pair(1, 0),
+            new Pair(0, 1),
+            new Pair(0, -1)
     );
 
-    private static final Map<Position, Set<Character>> directionCompatibilityMap = Map.of(
+    private static final Map<Pair, Set<Character>> directionCompatibilityMap = Map.of(
             directions.get(2), Set.of('|', '7', 'F', 'S'),
             directions.get(3), Set.of('|', 'L', 'J', 'S'),
             directions.get(1), Set.of('-', 'L', 'F', 'S'),
@@ -58,7 +58,7 @@ public class Day10 {
 
         for (int y = 0; y < grid.data().length; y++) {
             for (int x = 0; x < grid.data()[y].length; x++) {
-                if (!boundaries.contains(new Position(x, y))) {
+                if (!boundaries.contains(new Pair(x, y))) {
                     // for debug
                     grid.updateElement(x, y, 'x');
                 } else {
@@ -120,15 +120,15 @@ public class Day10 {
         System.out.println(count);
     }
 
-    private static List<Position> explore(Grid<Character> grid, Position start) {
+    private static List<Pair> explore(Grid<Character> grid, Pair start) {
         // cheat code 2
-        Position[] nodes = new Position[100000];
+        Pair[] nodes = new Pair[100000];
         LinkedList<ExploreInput> stack = new LinkedList<>();
         stack.addLast(new ExploreInput(start, 0, null));
         while (!stack.isEmpty()) {
             var curr = stack.removeLast();
             nodes[curr.i] = curr.pos;
-            for (Position direction : directions) {
+            for (Pair direction : directions) {
                 if (direction.equals(curr.exceptDirection)) {
                     continue;
                 }
@@ -139,7 +139,7 @@ public class Day10 {
                         return IntStream.range(0, curr.i + 1).boxed().map(idx -> nodes[idx])
                                 .collect(Collectors.toList());
                     } else {
-                        stack.addLast(new ExploreInput(next, curr.i + 1, new Position(-direction.x(), -direction.y())));
+                        stack.addLast(new ExploreInput(next, curr.i + 1, new Pair(-direction.x(), -direction.y())));
                     }
                 }
             }
@@ -147,11 +147,11 @@ public class Day10 {
         return Collections.emptyList();
     }
 
-    private static Position connect(Position pos, Grid<Character> grid, Position direction) {
+    private static Pair connect(Pair pos, Grid<Character> grid, Pair direction) {
         var curr = Objects.requireNonNull(grid.element(pos));
         if (curr == 'S' || directionCompatibilityMap.get(direction).contains(curr)) {
-            var nextPos = new Position(pos.x() + direction.x(), pos.y() + direction.y());
-            Position revertDirection = new Position(-direction.x(), -direction.y());
+            var nextPos = new Pair(pos.x() + direction.x(), pos.y() + direction.y());
+            Pair revertDirection = new Pair(-direction.x(), -direction.y());
             return grid.isInBounds(nextPos) && directionCompatibilityMap.get(revertDirection).contains(grid.element(nextPos)) ?
                     nextPos :
                     null;
@@ -159,7 +159,7 @@ public class Day10 {
         return null;
     }
 
-    private record ExploreInput(Position pos, int i, Position exceptDirection) {
+    private record ExploreInput(Pair pos, int i, Pair exceptDirection) {
 
     }
 }

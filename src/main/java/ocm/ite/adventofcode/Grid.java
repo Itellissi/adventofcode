@@ -16,12 +16,12 @@ public record Grid<T>(T[][] data) {
         return new Grid<>(dat);
     }
 
-    public List<Position> findAllMatch(Predicate<T> predicate) {
-        var result = new ArrayList<Position>();
+    public List<Pair> findAllMatch(Predicate<T> predicate) {
+        var result = new ArrayList<Pair>();
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data[i].length; j++) {
                 if (predicate.test(data[i][j])) {
-                    result.add(new Position(j, i));
+                    result.add(new Pair(j, i));
                 }
             }
         }
@@ -41,11 +41,11 @@ public record Grid<T>(T[][] data) {
         }
     }
 
-    public Position findAnyMatch(Predicate<T> predicate) {
+    public Pair findAnyMatch(Predicate<T> predicate) {
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data[i].length; j++) {
                 if (predicate.test(data[i][j])) {
-                    return new Position(j, i);
+                    return new Pair(j, i);
                 }
             }
         }
@@ -58,7 +58,7 @@ public record Grid<T>(T[][] data) {
         }
     }
 
-    public void updateElement(Position pos, T newValue) {
+    public void updateElement(Pair pos, T newValue) {
         if (isInBounds(pos.x(), pos.y())) {
             data[pos.y()][pos.x()] = newValue;
         }
@@ -71,7 +71,7 @@ public record Grid<T>(T[][] data) {
         return null;
     }
 
-    public T element(Position pos) {
+    public T element(Pair pos) {
         if (isInBounds(pos.x(), pos.y())) {
             return data[pos.y()][pos.x()];
         }
@@ -83,7 +83,7 @@ public record Grid<T>(T[][] data) {
                 x >= 0 && x < data[y].length;
     }
 
-    public boolean isInBounds(Position pos) {
+    public boolean isInBounds(Pair pos) {
         return pos.y() >= 0 && pos.y() < data.length &&
                 pos.x() >= 0 && pos.x() < data[pos.y()].length;
     }

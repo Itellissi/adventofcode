@@ -2,7 +2,7 @@ package ocm.ite.adventofcode.y2023;
 
 import ocm.ite.adventofcode.AocUtils;
 import ocm.ite.adventofcode.Grid;
-import ocm.ite.adventofcode.Position;
+import ocm.ite.adventofcode.Pair;
 
 import java.util.HashSet;
 
@@ -26,7 +26,7 @@ public class Day16 {
                 Character[].class
         );
 
-        var startBeam = new Beam(new Position(0, 0), new Position(1, 0));
+        var startBeam = new Beam(new Pair(0, 0), new Pair(1, 0));
         long countEnergized = countEnergized(grid, startBeam);
         System.out.println(countEnergized);
     }
@@ -40,20 +40,20 @@ public class Day16 {
 
         var max = 0L;
         for (int y = 0; y < grid.data().length; y++) {
-            var startBeam = new Beam(new Position(0, y), new Position(1, 0));
+            var startBeam = new Beam(new Pair(0, y), new Pair(1, 0));
             long countEnergized = countEnergized(grid, startBeam);
             max = Math.max(max, countEnergized);
 
-            startBeam = new Beam(new Position(grid.data()[y].length - 1, y), new Position(-1, 0));
+            startBeam = new Beam(new Pair(grid.data()[y].length - 1, y), new Pair(-1, 0));
             countEnergized = countEnergized(grid, startBeam);
             max = Math.max(max, countEnergized);
         }
         for (int x = 0; x < grid.data().length; x++) {
-            var startBeam = new Beam(new Position(x, 0), new Position(0, 1));
+            var startBeam = new Beam(new Pair(x, 0), new Pair(0, 1));
             long countEnergized = countEnergized(grid, startBeam);
             max = Math.max(max, countEnergized);
 
-            startBeam = new Beam(new Position(x, grid.data().length - 1), new Position(0, -1));
+            startBeam = new Beam(new Pair(x, grid.data().length - 1), new Pair(0, -1));
             countEnergized = countEnergized(grid, startBeam);
             max = Math.max(max, countEnergized);
         }
@@ -85,20 +85,20 @@ public class Day16 {
                 navigate(nextBeam, grid, existingBeams);
             }
             case '/' -> {
-                var newDirection = new Position(-currentBeam.direction.y(), -currentBeam.direction.x());
+                var newDirection = new Pair(-currentBeam.direction.y(), -currentBeam.direction.x());
                 var nextBeam = new Beam(currentBeam.nextPosition(newDirection), newDirection);
                 navigate(nextBeam, grid, existingBeams);
             }
             case '\\' -> {
-                var newDirection = new Position(currentBeam.direction.y(), currentBeam.direction.x());
+                var newDirection = new Pair(currentBeam.direction.y(), currentBeam.direction.x());
                 var nextBeam = new Beam(currentBeam.nextPosition(newDirection), newDirection);
                 navigate(nextBeam, grid, existingBeams);
             }
             case '|' -> {
                 // split
                 if (currentBeam.direction.x() != 0) {
-                    var direction1 = new Position(0, 1);
-                    var direction2 = new Position(0, -1);
+                    var direction1 = new Pair(0, 1);
+                    var direction2 = new Pair(0, -1);
                     var nextBeam1 = new Beam(currentBeam.nextPosition(direction1), direction1);
                     var nextBeam2 = new Beam(currentBeam.nextPosition(direction2), direction2);
                     navigate(nextBeam1, grid, existingBeams);
@@ -111,8 +111,8 @@ public class Day16 {
             case '-' -> {
                 // split
                 if (currentBeam.direction.y() != 0) {
-                    var direction1 = new Position(1, 0);
-                    var direction2 = new Position(-1, 0);
+                    var direction1 = new Pair(1, 0);
+                    var direction2 = new Pair(-1, 0);
                     var nextBeam1 = new Beam(currentBeam.nextPosition(direction1), direction1);
                     var nextBeam2 = new Beam(currentBeam.nextPosition(direction2), direction2);
                     navigate(nextBeam1, grid, existingBeams);
@@ -126,10 +126,10 @@ public class Day16 {
         }
     }
 
-    private record Beam(Position p, Position direction) {
+    private record Beam(Pair p, Pair direction) {
 
-        Position nextPosition(Position direction) {
-            return new Position(p.x() + direction.x(), p.y() + direction.y());
+        Pair nextPosition(Pair direction) {
+            return new Pair(p.x() + direction.x(), p.y() + direction.y());
         }
     }
 }

@@ -2,7 +2,7 @@ package ocm.ite.adventofcode.y2023;
 
 import ocm.ite.adventofcode.AocUtils;
 import ocm.ite.adventofcode.Grid;
-import ocm.ite.adventofcode.Position;
+import ocm.ite.adventofcode.Pair;
 
 import java.util.List;
 import java.util.Set;
@@ -32,7 +32,7 @@ public class Day11 {
                 Character[].class
         );
 
-        List<Position> galaxiesPositions = grid.findAllMatch(c -> c.equals('#'));
+        List<Pair> galaxiesPositions = grid.findAllMatch(c -> c.equals('#'));
         var emptyRows = IntStream.range(0, grid.data().length)
                 .boxed()
                 .collect(Collectors.toSet());
@@ -54,7 +54,7 @@ public class Day11 {
         System.out.println(result);
     }
 
-    private static long distance(Position p1, Position p2, Set<Integer> emptyRows, Set<Integer> emptyColumns, long expansion) {
+    private static long distance(Pair p1, Pair p2, Set<Integer> emptyRows, Set<Integer> emptyColumns, long expansion) {
         long xMax = Math.max(p1.x(), p2.x());
         long xMin = Math.min(p1.x(), p2.x());
 

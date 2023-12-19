@@ -2,7 +2,7 @@ package ocm.ite.adventofcode.y2023;
 
 import ocm.ite.adventofcode.AocUtils;
 import ocm.ite.adventofcode.Grid;
-import ocm.ite.adventofcode.Position;
+import ocm.ite.adventofcode.Pair;
 
 import java.util.*;
 
@@ -10,14 +10,14 @@ public class Day17 {
 
     private static final String inputFile = "/input/2023/day17.txt";
 
-    private static final List<Position> horizontalDirection = List.of(
-            new Position(1, 0),
-            new Position(-1, 0)
+    private static final List<Pair> horizontalDirection = List.of(
+            new Pair(1, 0),
+            new Pair(-1, 0)
     );
 
-    private static final List<Position> verticalDirection = List.of(
-            new Position(0, 1),
-            new Position(0, -1)
+    private static final List<Pair> verticalDirection = List.of(
+            new Pair(0, 1),
+            new Pair(0, -1)
     );
 
     public static void main(String[] args) {
@@ -51,8 +51,8 @@ public class Day17 {
     }
 
     private static int dijkstra(Grid<Integer> grid, int minSameDir, int maxSameDir) {
-        var path1 = new Path(new Position(1, 0), new Position(1, 0), 1);
-        var path2 = new Path(new Position(0, 1), new Position(0, 1), 1);
+        var path1 = new Path(new Pair(1, 0), new Pair(1, 0), 1);
+        var path2 = new Path(new Pair(0, 1), new Pair(0, 1), 1);
         var todo = new PriorityQueue<Map.Entry<Path, Integer>>(Map.Entry.comparingByValue());
         var done = new HashSet<Path>();
 
@@ -64,7 +64,7 @@ public class Day17 {
             var cost = e.getValue();
             var currentPath = e.getKey();
 
-            var nextDirections = new ArrayList<Position>();
+            var nextDirections = new ArrayList<Pair>();
             if (currentPath.sameDirectionCount >= minSameDir) {
                 if (currentPath.d.x() == 0) {
                     nextDirections.addAll(horizontalDirection);
@@ -100,10 +100,10 @@ public class Day17 {
         return -1;
     }
 
-    private record Path(Position p, Position d, int sameDirectionCount) {
+    private record Path(Pair p, Pair d, int sameDirectionCount) {
 
-        Position nextPosition(Position direction) {
-            return new Position(p.x() + direction.x(), p.y() + direction.y());
+        Pair nextPosition(Pair direction) {
+            return new Pair(p.x() + direction.x(), p.y() + direction.y());
         }
     }
 }
