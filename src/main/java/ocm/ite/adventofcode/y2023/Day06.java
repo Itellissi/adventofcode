@@ -26,7 +26,7 @@ public class Day06 {
                 .filter(Predicate.not(String::isBlank))
                 .map(Long::parseLong)
                 .toList();
-        for (int i =0; i < times.size(); i++) {
+        for (int i = 0; i < times.size(); i++) {
             var time = times.get(i);
             var distance = distances.get(i);
 
