@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import static ocm.ite.adventofcode.AocUtils.ppcm;
+
 public class Day08 {
 
     public static void main(String[] args) {
@@ -146,21 +148,6 @@ public class Day08 {
         }
 
         System.out.println(rs);
-    }
-
-
-    public static long ppcm(long nb1, long nb2) {
-        long product, rest, ppcm;
-
-        product = nb1 * nb2;
-        rest = nb1 % nb2;
-        while (rest != 0) {
-            nb1 = nb2;
-            nb2 = rest;
-            rest = nb1 % nb2;
-        }
-        ppcm = product / nb2;
-        return ppcm;
     }
 
     private static class Node {
