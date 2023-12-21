@@ -72,8 +72,16 @@ public record Grid<T>(T[][] data) {
     }
 
     public T element(Pair pos) {
-        if (isInBounds(pos.x(), pos.y())) {
-            return data[pos.y()][pos.x()];
+        return element(pos, false);
+    }
+
+    public T element(Pair pos, boolean infinite) {
+        if (infinite || isInBounds(pos.x(), pos.y())) {
+            int actualY = pos.y() % data.length;
+            actualY = actualY < 0 ? actualY + data.length : actualY;
+            int actualX = pos.x() % data[actualY].length;
+            actualX = actualX < 0 ? actualX + data[actualY].length : actualX;
+            return data[actualY][actualX];
         }
         return null;
     }
