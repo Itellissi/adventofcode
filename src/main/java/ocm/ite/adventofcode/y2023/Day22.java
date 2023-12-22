@@ -79,9 +79,7 @@ public class Day22 {
                     new Tuple<>(Math.max(l[0], r[0]), Math.max(l[1], r[1]), Math.max(l[2], r[2]))
             ));
         }
-        Comparator<Brick> comparator = Comparator.comparing(b -> b.start.z());
-        comparator.thenComparing(b -> b.end.z());
-        bricks.sort(comparator);
+        bricks.sort(Comparator.comparing(b -> b.start.z()));
 
         var baseBricks = new ArrayList<Brick>();
         for (var current : bricks) {
@@ -116,8 +114,7 @@ public class Day22 {
 
         private final Set<Brick> supportedBy = new HashSet<>();
 
-
-        boolean cross(Brick b) {
+        private boolean cross(Brick b) {
             boolean xCross = b.end.x() >= start.x() && end.x() >= b.start.x();
             boolean yCross = b.end.y() >= start.y() && end.y() >= b.start.y();
             return xCross && yCross;
