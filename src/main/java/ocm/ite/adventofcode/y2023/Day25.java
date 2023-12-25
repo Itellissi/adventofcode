@@ -3,6 +3,7 @@ package ocm.ite.adventofcode.y2023;
 import lombok.SneakyThrows;
 import ocm.ite.adventofcode.AocUtils;
 import org.jgrapht.alg.StoerWagnerMinimumCut;
+import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
@@ -24,7 +25,7 @@ public class Day25 {
 
     @SneakyThrows
     public static void part1() {
-        var graph = new SimpleWeightedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+        var graph = new SimpleWeightedGraph<String, DefaultEdge>(DefaultEdge.class);
         for (var l : AocUtils.readLines(inputFile)) {
             var desc = l.split(":");
             var compName = desc[0];
