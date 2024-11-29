@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -14,18 +16,23 @@ public class AocUtils {
         return mapLines(filePath, Function.identity());
     }
 
-    public static <T> List<T> mapLines(String filePath, Function<String, T> mapper) {
+    public static <T> List<T> mapLines(String filePath, BiFunction<Integer, String, T> mapper) {
         try (
                 var is = AocUtils.class.getResourceAsStream(filePath);
                 var r = new InputStreamReader(Objects.requireNonNull(is));
                 var reader = new BufferedReader(r);
         ) {
+            var counter = new AtomicInteger();
             return reader.lines()
-                    .map(mapper)
+                    .map(l -> mapper.apply(counter.getAndIncrement(), l))
                     .collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static <T> List<T> mapLines(String filePath, Function<String, T> mapper) {
+        return mapLines(filePath, (i, l) -> mapper.apply(l));
     }
 
     public static long ppcm(long nb1, long nb2) {

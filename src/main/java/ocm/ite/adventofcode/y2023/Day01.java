@@ -31,7 +31,7 @@ public class Day01 {
         Long first;
         Long last;
         int result = 0;
-        Long digit = 0L;
+        var digit = 0L;
         for (var line : lines) {
             first = null;
             last = null;
