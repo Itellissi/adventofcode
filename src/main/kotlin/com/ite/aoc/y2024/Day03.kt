@@ -11,7 +11,7 @@ class Day03 : AocDay<Day03Input>(
     year = 2024,
 ) {
 
-    private val mulRegex = """mul\((?<left>\d+),(?<right>\d+)\)""".toRegex()
+    private val mulRegex = """mul\((?<left>\d{1,3}),(?<right>\d{1,3})\)""".toRegex()
     private val dontRegex = """don't\(\)(?<dont>(?:.(?!do\(\)))*)""".toRegex()
 
     override fun part1(entries: String): Long {
