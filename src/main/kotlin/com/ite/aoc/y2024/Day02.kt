@@ -1,7 +1,7 @@
 package com.ite.aoc.y2024
 
 import com.ite.aoc.AocDay
-import ocm.ite.adventofcode.AocUtils
+import com.ite.aoc.mapLines
 
 typealias Day02Input = List<List<Int>>
 
@@ -65,7 +65,7 @@ class Day02 : AocDay<Day02Input>(
     private fun isSafe(x: Int, y: Int, validRange: IntRange): Boolean = y - x in validRange
 
     override fun convert(file: String): Day02Input =
-        AocUtils.mapLines(file) { _, l -> l.split(" ").map { it.toInt() } }
+        file.mapLines { _, l -> l.split(" ").map { it.toInt() } }
 
 }
 

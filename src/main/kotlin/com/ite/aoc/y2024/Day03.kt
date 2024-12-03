@@ -1,6 +1,7 @@
 package com.ite.aoc.y2024
 
 import com.ite.aoc.AocDay
+import com.ite.aoc.mapLines
 import ocm.ite.adventofcode.AocUtils
 
 
@@ -29,7 +30,7 @@ class Day03 : AocDay<Day03Input>(
     }
 
     override fun convert(file: String): Day03Input =
-        AocUtils.mapLines(file) { _, l -> l }
+        file.mapLines { _, l -> l }
             .joinToString("")
 
 }

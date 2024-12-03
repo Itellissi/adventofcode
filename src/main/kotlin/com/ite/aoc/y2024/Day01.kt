@@ -1,7 +1,7 @@
 package com.ite.aoc.y2024
 
 import com.ite.aoc.AocDay
-import ocm.ite.adventofcode.AocUtils
+import com.ite.aoc.mapLines
 import kotlin.math.abs
 
 typealias Day01Input = Pair<List<Int>, List<Int>>
@@ -23,7 +23,9 @@ class Day01 : AocDay<Day01Input>(
     }
 
     override fun convert(file: String): Day01Input =
-        AocUtils.mapLines(file) { _, l -> l.substringBefore(" ").toInt() to l.substringAfterLast(" ").toInt() }.unzip()
+        file.mapLines { _, l ->
+            l.substringBefore(" ").toInt() to l.substringAfterLast(" ").toInt()
+        }.unzip()
 }
 
 fun main() {
