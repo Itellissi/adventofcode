@@ -4,13 +4,15 @@ import com.ite.aoc.AocDay
 import ocm.ite.adventofcode.AocUtils
 import kotlin.math.abs
 
-class Day02 : AocDay<List<List<Int>>>(
+typealias Day02Input = List<List<Int>>
+
+class Day02 : AocDay<Day02Input>(
     day = 2,
     year = 2024,
 ) {
 
-    override fun part1(entries: List<List<Int>>): Any? = common(entries, 0)
-    override fun part2(entries: List<List<Int>>): Any? = common(entries, 1)
+    override fun part1(entries: Day02Input): Int = common(entries, 0)
+    override fun part2(entries: Day02Input): Int = common(entries, 1)
 
     private fun common(entries: List<List<Int>>, maxDumpCount: Int): Int {
         var count = 0
@@ -52,7 +54,7 @@ class Day02 : AocDay<List<List<Int>>>(
         return abs(diff) in 1..3 && ((diff > 0 && asc) || diff < 0 && !asc)
     }
 
-    override fun convert(file: String): List<List<Int>> =
+    override fun convert(file: String): Day02Input =
         AocUtils.mapLines(file) { _, l -> l.split(" ").map { it.toInt() } }
 
 }

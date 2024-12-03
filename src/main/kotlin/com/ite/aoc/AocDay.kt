@@ -1,9 +1,9 @@
 package com.ite.aoc
 
 import java.awt.Toolkit
-import java.awt.datatransfer.Clipboard
 import java.awt.datatransfer.StringSelection
-import kotlin.reflect.jvm.internal.impl.resolve.constants.KClassValue.Value
+import java.io.File
+import kotlin.system.exitProcess
 import kotlin.time.measureTime
 
 abstract class AocDay<T>(
@@ -19,6 +19,12 @@ abstract class AocDay<T>(
     abstract fun convert(file: String): T
 
     fun solve(copyResult: Boolean = false, part: Int? = null) {
+        val inputFile = File("src/main/resources$file")
+        if (!inputFile.exists()) {
+            inputFile.parentFile.mkdirs()
+            inputFile.createNewFile()
+            exitProcess(1)
+        }
         val entries = convert(file)
         val result1 = Result(null)
         val duration1 = measureTime {
