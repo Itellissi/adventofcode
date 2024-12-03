@@ -29,8 +29,6 @@ class Day02 : AocDay<Day02Input>(
     }
 
     private fun isSafe(r: List<Int>, maxDumpCount: Int): Boolean {
-        var dumpCount = 0
-        var safe = true
         var direction = 0
         // vote direction
         for (i in 1..3) when {
@@ -42,21 +40,29 @@ class Day02 : AocDay<Day02Input>(
             direction < 0 -> -3..-1
             else -> return false
         }
-        var i = 0
-        while (safe && i < r.size - 1) {
-            safe = isSafe(r, i, i + 1, validRange)
+        var i = 1
+        var prev = r[0]
+        var safe = true
+        var dumpCount = 0
+        while (safe && i in 1..<r.size) {
+            safe = isSafe(prev, r[i], validRange)
             if (!safe && dumpCount < maxDumpCount) {
                 dumpCount++
-                safe = i + 2 !in r.indices || isSafe(r, i, i + 2, validRange).also {
-                    if (it) i++
-                } || i - 1 !in r.indices || isSafe(r, i - 1, i + 1, validRange)
+                safe = true
+                when {
+                    i + 1 == r.size -> return true
+                    isSafe(prev, r[i + 1], validRange) -> Unit
+                    i - 2 < 0 || isSafe(r[i - 2], r[i], validRange) -> prev = r[i]
+                }
+            } else {
+                prev = r[i]
             }
             i++
         }
         return safe
     }
 
-    private fun isSafe(r: List<Int>, i: Int, j: Int, validRange: IntRange): Boolean = r[j] - r[i] in validRange
+    private fun isSafe(x: Int, y: Int, validRange: IntRange): Boolean = y - x in validRange
 
     override fun convert(file: String): Day02Input =
         AocUtils.mapLines(file) { _, l -> l.split(" ").map { it.toInt() } }
