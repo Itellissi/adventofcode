@@ -1,8 +1,7 @@
 package com.ite.aoc.y2024
 
 import com.ite.aoc.AocDay
-import com.ite.aoc.mapLines
-import ocm.ite.adventofcode.AocUtils
+import com.ite.aoc.readFile
 
 
 typealias Day03Input = String
@@ -29,9 +28,9 @@ class Day03 : AocDay<Day03Input>(
             .sumOf { it["left"]!!.value.toLong() * it["right"]!!.value.toLong() }
     }
 
-    override fun convert(file: String): Day03Input =
-        file.mapLines { _, l -> l }
-            .joinToString("")
+    override fun convert(file: String): Day03Input = file.readFile()
+        .lines()
+        .joinToString()
 
 }
 
