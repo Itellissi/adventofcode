@@ -1,6 +1,6 @@
 package com.ite.aoc
 
-fun String.readFile() = AocDay::class.java.getResource(this)?.readText()
+fun String.readFile() = AocUtils::class.java.getResource(this)?.readText()
     ?: throw IllegalArgumentException("Invalid file $this")
 
 fun <T> String.mapLines(mapper: (Int, String) -> T): List<T> = readFile()
@@ -23,4 +23,28 @@ fun <T> List<List<T>>.traverseWithSum(mapper: (Int, Int, T) -> Long): Long = tra
 
 fun <T> List<List<T>>.forEachCell(consumer: (Int, Int, T) -> Nothing) = traverse(null) { i, j, c, s ->
     consumer(i, j, c)
+}
+
+fun Pair<Int, Int>.navigate(currentPos: Pair<Int, Int>): Pair<Int, Int> =
+    Pair(currentPos.first + this.first, currentPos.second + this.second)
+
+fun <T> Pair<Int, Int>.inRange(grid: List<List<T>>) =
+    this.first in grid.indices && this.second in grid[this.first].indices
+
+fun <T> List<List<T>>.atPos(pos: Pair<Int, Int>) = this[pos.first][pos.second]
+
+class AocUtils {
+
+    object Directions {
+        val NW = -1 to -1
+        val N = -1 to 0
+        val NE = -1 to 1
+        val E = 0 to 1
+        val SE = 1 to 1
+        val S = 1 to 0
+        val SW = 1 to -1
+        val W = 0 to -1
+
+        val ALL = listOf(NW, N, NE, E, SE, S, SW, W)
+    }
 }

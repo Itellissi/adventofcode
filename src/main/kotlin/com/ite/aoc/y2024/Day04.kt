@@ -1,8 +1,6 @@
 package com.ite.aoc.y2024
 
-import com.ite.aoc.AocDay
-import com.ite.aoc.mapLines
-import com.ite.aoc.traverseWithSum
+import com.ite.aoc.*
 
 private typealias Day202404Input = List<List<Char>>
 
@@ -19,16 +17,7 @@ class Day04 : AocDay<Day202404Input>(
         return entries.traverseWithSum { i, j, _ -> crossCount(entries, i, j).toLong() }
     }
 
-    private val directions: List<Pair<Int, Int>> = listOf(
-        1 to 0,
-        -1 to 0,
-        0 to 1,
-        0 to -1,
-        1 to 1,
-        1 to -1,
-        -1 to 1,
-        -1 to -1,
-    )
+    private val directions: List<Pair<Int, Int>> = AocUtils.Directions.ALL
 
     private val searchWord = "XMAS"
 
@@ -40,13 +29,12 @@ class Day04 : AocDay<Day202404Input>(
         var sum = 0
         if (entries[i][j] == searchWord[0]) {
             directions.forEach { d ->
-                var ni = i
-                var nj = j
+                var pos = (i to j)
                 for (k in 1..<searchWord.length) {
-                    ni += d.first
-                    nj += d.second
-                    if (!(ni in entries.indices && nj in entries[i].indices && entries[ni][nj] == searchWord[k])) {
-                        return@forEach
+                    pos = d.navigate(pos).also {
+                        if (!(it.inRange(entries) && entries.atPos(it) == searchWord[k])) {
+                            return@forEach
+                        }
                     }
                 }
                 sum += 1
