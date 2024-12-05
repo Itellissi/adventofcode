@@ -3,7 +3,7 @@ package com.ite.aoc
 fun String.readFile() = AocUtils::class.java.getResource(this)?.readText()
     ?: throw IllegalArgumentException("Invalid file $this")
 
-fun <T, R> String.foldInput(initial: R, accumulator: (R, String) -> R): R = readFile()
+fun <R> String.foldInput(initial: R, accumulator: (R, String) -> R): R = readFile()
     .lines()
     .fold(initial, accumulator)
 

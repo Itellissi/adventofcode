@@ -1,8 +1,10 @@
 package com.ite.aoc.y2024
 
 import com.ite.aoc.AocDay
+import com.ite.aoc.foldInput
 import com.ite.aoc.mapLines
 import com.ite.aoc.readFile
+import java.util.function.BiFunction
 
 private typealias Day202405Input = Input
 
@@ -33,23 +35,21 @@ class Day05 : AocDay<Day202405Input>(
     }
 
     override fun convert(file: String): Day202405Input {
-        val rules = mutableListOf<Pair<Int, Int>>()
-        val pages = mutableListOf<List<Int>>()
-        file.readFile().lines().forEach { l ->
+        return file.foldInput(Input(mutableMapOf(), mutableListOf())) { input, l ->
             when {
-                ruleRegex.matches(l) -> ruleRegex.find(l)!!.groupValues.run { rules.add(this[1].toInt() to this[2].toInt()) }
+                ruleRegex.matches(l) -> ruleRegex.find(l)!!.groupValues.run {
+                    input.rules.compute(this[1].toInt()) { _, v ->
+                        v?.also { v.add(this[2].toInt()) } ?: mutableSetOf(this[2].toInt())
+                    }
+                }
+
                 pagesRegex.containsMatchIn(l) -> pagesRegex.findAll(l)
                     .map { it.groupValues[1].toInt() }
                     .toList()
-                    .run { pages.add(this) }
+                    .run { input.pages.add(this) }
             }
+            input
         }
-        return Input(
-            rules = rules.groupBy { it.first }
-                .map { e -> e.key to e.value.map { v -> v.second }.toSet() }
-                .toMap(),
-            pages = pages.toList(),
-        )
     }
 
     private fun isSorted(p: List<Int>, rules: Map<Int, Set<Int>>): Boolean {
@@ -64,7 +64,7 @@ class Day05 : AocDay<Day202405Input>(
     }
 }
 
-data class Input(val rules: Map<Int, Set<Int>>, val pages: List<List<Int>>)
+data class Input(val rules: MutableMap<Int, MutableSet<Int>>, val pages: MutableList<List<Int>>)
 
 fun main() {
     Day05().solve(copyResult = true)
