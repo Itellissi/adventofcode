@@ -25,8 +25,16 @@ fun <T> List<List<T>>.traverseWithSum(mapper: (Int, Int, T) -> Long): Long = tra
     s + mapper(i, j, c)
 }
 
-fun <T> List<List<T>>.forEachCell(consumer: (Int, Int, T) -> Nothing) = traverse(null) { i, j, c, s ->
+fun <T> List<List<T>>.forEachCell(consumer: (Int, Int, T) -> Unit) = traverse(null) { i, j, c, s ->
     consumer(i, j, c)
+    return@traverse null
+}
+
+fun <T> List<List<T>>.printGrid(marker: (Int, Int, T) -> T = { _, _, c -> c }) = forEachCell { i, j, c ->
+    print(marker(i, j, c))
+    if (j == this[i].size - 1) {
+        println()
+    }
 }
 
 fun Pair<Int, Int>.navigate(currentPos: Pair<Int, Int>): Pair<Int, Int> =

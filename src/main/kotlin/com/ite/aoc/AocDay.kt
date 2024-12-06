@@ -18,7 +18,8 @@ abstract class AocDay<T>(
 
     abstract fun convert(file: String): T
 
-    fun solve(copyResult: Boolean = false, part: Int? = null) {
+    fun solve(copyResult: Boolean = false, part: Int? = null, test: Boolean = false) {
+        val file = this.file + (if (test) ".tst" else "")
         val inputFile = File("src/main/resources$file")
         if (!inputFile.exists()) {
             inputFile.parentFile.mkdirs()
