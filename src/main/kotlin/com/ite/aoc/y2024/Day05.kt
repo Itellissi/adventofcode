@@ -2,9 +2,6 @@ package com.ite.aoc.y2024
 
 import com.ite.aoc.AocDay
 import com.ite.aoc.foldInput
-import com.ite.aoc.mapLines
-import com.ite.aoc.readFile
-import java.util.function.BiFunction
 
 private typealias Day202405Input = Input
 
