@@ -1,5 +1,7 @@
 package com.ite.aoc
 
+import kotlin.math.abs
+
 fun String.readFile() = AocUtils::class.java.getResource(this)?.readText()
     ?: throw IllegalArgumentException("Invalid file $this")
 
@@ -25,9 +27,13 @@ fun <T> List<List<T>>.traverseWithSum(mapper: (Int, Int, T) -> Long): Long = tra
     s + mapper(i, j, c)
 }
 
-fun <T> List<List<T>>.forEachCell(consumer: (Int, Int, T) -> Unit) = traverse(null) { i, j, c, s ->
-    consumer(i, j, c)
+fun <T> List<List<T>>.forEachPosition(consumer: (Position, T) -> Unit) = traverse(null) { i, j, c, s ->
+    consumer(i to j, c)
     return@traverse null
+}
+
+fun <T> List<List<T>>.forEachCell(consumer: (Int, Int, T) -> Unit) = forEachPosition { p, c ->
+    consumer(p.first, p.second, c)
 }
 
 fun <T> List<List<T>>.printGrid(marker: (Int, Int, T) -> T = { _, _, c -> c }) = forEachCell { i, j, c ->
@@ -37,13 +43,17 @@ fun <T> List<List<T>>.printGrid(marker: (Int, Int, T) -> T = { _, _, c -> c }) =
     }
 }
 
-fun Pair<Int, Int>.navigate(currentPos: Pair<Int, Int>): Pair<Int, Int> =
+fun Position.navigate(currentPos: Position): Position =
     Pair(currentPos.first + this.first, currentPos.second + this.second)
 
-fun <T> Pair<Int, Int>.inRange(grid: List<List<T>>) =
+fun Position.negate(): Position = Pair(-this.first, -this.second)
+
+fun <T> Position.inRange(grid: List<List<T>>) =
     this.first in grid.indices && this.second in grid[this.first].indices
 
-fun <T> List<List<T>>.atPos(pos: Pair<Int, Int>) = this[pos.first][pos.second]
+fun <T> List<List<T>>.atPos(pos: Position) = this[pos.first][pos.second]
+
+typealias Position = Pair<Int, Int>
 
 class AocUtils {
 
@@ -58,5 +68,33 @@ class AocUtils {
         val W = 0 to -1
 
         val ALL = listOf(NW, N, NE, E, SE, S, SW, W)
+    }
+
+    object Math {
+
+        fun gcd(l: Int, r: Int): Long = gcd(l.toLong(), r.toLong())
+
+        fun gcd(l: Long, r: Long): Long {
+            var n1 = abs(l)
+            var n2 = abs(r)
+            while (n1 != n2) {
+                if (n1 > n2)
+                    n1 -= n2
+                else
+                    n2 -= n1
+            }
+            return n1
+        }
+
+        fun ppcm(l: Int, r: Int): Long = ppcm(l.toLong(), r.toLong())
+
+        fun ppcm(l: Long, r: Long): Long = ocm.ite.adventofcode.AocUtils.ppcm(l, r)
+
+        fun areInLine(a: Position, b: Position, c: Position): Boolean {
+            val area =
+                a.first * (b.second - c.second) + b.first * (c.second - a.second) + c.first * (a.second - b.second)
+            return area == 0
+        }
+
     }
 }

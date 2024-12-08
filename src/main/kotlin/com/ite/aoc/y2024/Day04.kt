@@ -17,7 +17,7 @@ class Day04 : AocDay<Day202404Input>(
         return entries.traverseWithSum { i, j, _ -> crossCount(entries, i, j).toLong() }
     }
 
-    private val directions: List<Pair<Int, Int>> = AocUtils.Directions.ALL
+    private val directions: List<Position> = AocUtils.Directions.ALL
 
     private val searchWord = "XMAS"
 
