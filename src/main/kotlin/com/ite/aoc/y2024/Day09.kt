@@ -58,7 +58,7 @@ class Day09 : AocDay<Day202409Input>(
                 memory[i] = -1 to 0
                 memory.add(i + 1, -1 to remaining)
                 memory.add(i + 1, file)
-                if (!keepMin) iMin += 2
+                while (!keepMin && memory[iMin].second == 0) iMin += 2
             } else {
                 j -= 2
             }

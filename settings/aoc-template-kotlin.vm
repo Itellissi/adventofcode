@@ -1,8 +1,8 @@
 #if (${PACKAGE_NAME} && ${PACKAGE_NAME} != "")package ${PACKAGE_NAME}
-    #set($Integer = 0)
-    #set($CustomDay = $NAME.substring(3))
-    #set($CustomYear = $PACKAGE_NAME.substring($PACKAGE_NAME.indexOf(".y") + 2))
-    #set($Input = 'Day' + ${CustomYear} + ${CustomDay} + 'Input')
+#set($Integer = 0)
+#set($CustomDay = $NAME.substring(3))
+#set($CustomYear = $PACKAGE_NAME.substring($PACKAGE_NAME.indexOf(".y") + 2))
+#set($Input = 'Day' + ${CustomYear} + ${CustomDay} + 'Input')
 
 import com.ite.aoc.AocDay
 import com.ite.aoc.mapLines
