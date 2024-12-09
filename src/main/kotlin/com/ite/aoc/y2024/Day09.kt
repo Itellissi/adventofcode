@@ -43,11 +43,14 @@ class Day09 : AocDay<Day202409Input>(
     override fun part2(entries: Day202409Input): Long? {
         val memory = extractMemory(entries)
         var j = memory.size - 1
-        while (j > 0) {
+        var iMin = 1
+        while (j > iMin) {
             val file = memory[j]
-            var i = 1
+            var i = iMin
+            var keepMin = false
             while (i < j && memory[i].second < file.second) {
                 i += 2
+                keepMin = true
             }
             if (i < j) {
                 memory[j] = -1 to file.second
@@ -55,12 +58,12 @@ class Day09 : AocDay<Day202409Input>(
                 memory[i] = -1 to 0
                 memory.add(i + 1, -1 to remaining)
                 memory.add(i + 1, file)
+                if (!keepMin) iMin += 2
+            } else {
+                j -= 2
             }
-            j -= 2
         }
         val newMem = memory.filter { it.second != 0 }
-        // 0099811188827773336446555566
-        // 00 99 2 111 777.44.333....5555.6666.....8888..
         var offset = 0L
         return newMem.sumOf { p ->
             val (idx, count) = p
