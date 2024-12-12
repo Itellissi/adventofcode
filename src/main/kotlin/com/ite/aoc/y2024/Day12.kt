@@ -1,7 +1,6 @@
 package com.ite.aoc.y2024
 
 import com.ite.aoc.*
-import javax.swing.text.html.HTML.Tag.OL
 
 private typealias Day202412Input = List<List<Char>>
 
@@ -64,13 +63,11 @@ class Day12 : AocDay<Day202412Input>(
         return p to a
     }
 
-    // wrong 1506703
     override fun part2(entries: Day202412Input): Any? {
         val visited = entries.map { entries.map { false }.toMutableList() }
         return entries.traverseWithSum { i, j, g ->
             val pos = i to j
             if (!visited.atPos(pos)) countDiscount(pos, g, visited, entries)
-                .also { println("$g $it") }
                 .let { it.first * it.second }
             else 0
         }
@@ -95,27 +92,20 @@ class Day12 : AocDay<Day202412Input>(
         val neighbors = directions.map { it.navigate(pos) }
             .filter { it.inRange(entries) && entries.atPos(it) == type }
         when {
-            neighbors.isEmpty() -> {
-                p += 4
-            }
+            neighbors.isEmpty() -> p += 4
 
-            neighbors.size == 1 -> {
-                p += 2
-            }
+            neighbors.size == 1 -> p += 2
 
-            neighbors.size == 4 -> {
-                p += diags.map { it.navigate(pos) }
-                    .map { entries.atPos(it) }
-                    .count { it != type }
-            }
+            neighbors.size == 4 -> p += diags.map { it.navigate(pos) }
+                .map { entries.atPos(it) }
+                .count { it != type }
 
-            neighbors.size == 3 -> {
-                val det = when {
-                    areMirrors(neighbors[0], neighbors[1]) -> neighbors[2]
-                    areMirrors(neighbors[0], neighbors[2]) -> neighbors[1]
-                    else -> neighbors[0]
-                }
-                when {
+            neighbors.size == 3 -> when {
+                areMirrors(neighbors[0], neighbors[1]) -> neighbors[2]
+                areMirrors(neighbors[0], neighbors[2]) -> neighbors[1]
+                else -> neighbors[0]
+            }.let { det ->
+                p += when {
                     det.first == pos.first -> listOf(
                         det.navigate(AocUtils.Directions.N),
                         det.navigate(AocUtils.Directions.S)
@@ -128,7 +118,7 @@ class Day12 : AocDay<Day202412Input>(
 
             neighbors.size == 2 && areMirrors(neighbors[0], neighbors[1]) -> {}
 
-            neighbors.size == 2 -> {
+            else -> {
                 val i = if (neighbors[0].first == pos.first) neighbors[1].first else neighbors[0].first
                 val j = if (neighbors[0].second == pos.second) neighbors[1].second else neighbors[0].second
                 p += if (entries.atPos(i to j) == type) 1 else 2
@@ -152,5 +142,5 @@ class Day12 : AocDay<Day202412Input>(
 
 fun main() {
     Day12().solve(copyResult = true, test = true)
-    //Day12().solve(copyResult = true)
+    Day12().solve(copyResult = true)
 }
