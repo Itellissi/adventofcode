@@ -36,12 +36,13 @@ fun <T> List<List<T>>.forEachCell(consumer: (Int, Int, T) -> Unit) = forEachPosi
     consumer(p.first, p.second, c)
 }
 
-fun <T> List<List<T>>.printGrid(marker: (Int, Int, T) -> T = { _, _, c -> c }) = forEachCell { i, j, c ->
-    print(marker(i, j, c))
-    if (j == this[i].size - 1) {
-        println()
+fun <T> List<List<T>>.printGrid(marker: (Int, Int, T) -> String = { _, _, c -> c.toString() }) =
+    forEachCell { i, j, c ->
+        print(marker(i, j, c))
+        if (j == this[i].size - 1) {
+            println()
+        }
     }
-}
 
 fun Position.navigate(currentPos: Position): Position =
     Pair(currentPos.first + this.first, currentPos.second + this.second)
