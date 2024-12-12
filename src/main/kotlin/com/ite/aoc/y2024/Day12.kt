@@ -80,8 +80,6 @@ class Day12 : AocDay<Day202412Input>(
         entries: Day202412Input
     ): Pair<Long, Long> {
 
-        fun areMirrors(p1: Position, p2: Position) = p1.first == p2.first || p1.second == p2.second
-
         if (visited.atPos(pos)) {
             return 0L to 0L
         }
@@ -134,6 +132,7 @@ class Day12 : AocDay<Day202412Input>(
         return p to a
     }
 
+    private fun areMirrors(p1: Position, p2: Position) = p1.first == p2.first || p1.second == p2.second
 
     override fun convert(file: String): Day202412Input =
         file.mapLines { _, l -> l.toCharArray().toList() }
