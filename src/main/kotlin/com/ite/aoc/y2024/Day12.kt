@@ -1,6 +1,8 @@
 package com.ite.aoc.y2024
 
 import com.ite.aoc.*
+import java.awt.Color
+import kotlin.random.Random
 
 private typealias Day202412Input = List<List<Char>>
 
@@ -25,6 +27,10 @@ class Day12 : AocDay<Day202412Input>(
 
     override fun part1(entries: Day202412Input): Any? {
         val visited = entries.map { entries.map { false }.toMutableList() }
+        entries.visualize(cellSize = 7) { _, c ->
+            val h = ((c - 'A') % 26 + 13) / 26f
+            Color.getHSBColor(h, 1f, .7f);
+        }
         return entries.traverseWithSum { i, j, g ->
             val pos = i to j
             if (!visited.atPos(pos)) countNoDiscount(pos, g, visited, entries)
@@ -53,8 +59,6 @@ class Day12 : AocDay<Day202412Input>(
                     }
 
                     nextG != type -> p += 1
-
-                    else -> {}
                 }
             } else {
                 p += 1
