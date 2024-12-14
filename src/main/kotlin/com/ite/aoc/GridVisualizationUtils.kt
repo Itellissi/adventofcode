@@ -1,11 +1,7 @@
 package com.ite.aoc
 
-import java.awt.Color
-import java.awt.Dimension
-import java.awt.Graphics
-import javax.swing.JFrame
-import javax.swing.JPanel
-import javax.swing.JScrollPane
+import java.awt.*
+import javax.swing.*
 
 
 fun <T> List<List<T>>.visualize(
@@ -28,14 +24,22 @@ fun <T> List<List<T>>.visualize(
 }
 
 class GridVisualizer<T>(
-    private val grid: List<MutableList<T>>,
+    val grid: List<MutableList<T>>,
     private val cellSize: Int,
     private val refreshDelay: Long,
     private val colorMapper: (Pair<Int, Int>, T) -> Color,
 ) : JPanel() {
 
+    private val input = JTextField(10)
+    private val button = JButton("Submit")
+
     init {
-        preferredSize = Dimension(grid[0].size * cellSize, grid.size * cellSize)
+        preferredSize = Dimension(grid[0].size * cellSize, grid.size * cellSize + 20)
+        input.setBounds(preferredSize.width / 2 - 200, preferredSize.height - 1, 200, 20)
+        button.setBounds(preferredSize.width / 2, preferredSize.height - 1, 100, 20)
+        layout = null
+        add(input)
+        add(button)
     }
 
     override fun paintComponent(g: Graphics) {
@@ -66,6 +70,18 @@ class GridVisualizer<T>(
         rootPane?.repaint()
     }
 
+    fun updateCells(
+        positions: Collection<Position>,
+        valueMapper: (Position) -> T,
+        wait: Boolean = false,
+        customRefresh: Long? = null
+    ) {
+        positions.forEach { pos -> grid[pos.first][pos.second] = valueMapper(pos) }
+        revalidate()
+        if (wait) Thread.sleep(customRefresh ?: refreshDelay)
+        rootPane?.repaint()
+    }
+
     fun <R> updateThenResetCell(
         pos: Pair<Int, Int>,
         value: T,
@@ -79,6 +95,12 @@ class GridVisualizer<T>(
             return runnable()
         } finally {
             updateCell(pos, old, wait, customRefresh)
+        }
+    }
+
+    fun addSubmitAction(action: (String) -> Unit) {
+        button.addActionListener {
+            action(input.text)
         }
     }
 }
