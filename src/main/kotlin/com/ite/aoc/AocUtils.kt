@@ -39,6 +39,9 @@ fun <T> List<List<T>>.forEachCell(consumer: (Int, Int, T) -> Unit) = forEachPosi
 
 fun <T> List<List<T>>.printGrid(marker: (Int, Int, T) -> String = { _, _, c -> c.toString() }) =
     forEachCell { i, j, c ->
+        if (j == 0) {
+            print("$i\t")
+        }
         print(marker(i, j, c))
         if (j == this[i].size - 1) {
             println()

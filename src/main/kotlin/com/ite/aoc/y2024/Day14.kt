@@ -12,7 +12,7 @@ class Day14 : AocDay<Day202414Input>(
 
     private val inputRegex = """p=(\d+),(\d+) v=(-?\d+),(-?\d+)""".toRegex()
 
-    override fun part1(entries: Day202414Input): Any? {
+    override fun part1(entries: Day202414Input): Int {
         // test : 11 x 7
         // actual : 101 x 103
         val dimensions = 101 to 103
@@ -40,7 +40,7 @@ class Day14 : AocDay<Day202414Input>(
             val b = .2f + (i % 12) / 25f
             when (i) {
                 0 -> Color.WHITE
-                else -> Color.getHSBColor(.5f, 0.5f, b)
+                else -> Color.getHSBColor(.3f, 0.9f, b)
             }
         }
 
