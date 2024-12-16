@@ -1,11 +1,15 @@
 package com.ite.aoc.y2024
 
 import com.ite.aoc.*
+import java.awt.Color
 import java.util.*
-import kotlin.math.cos
 import kotlin.math.min
 
-private typealias Day202416Input = List<List<Char>>
+data class Day202416Input(
+    val grid: List<MutableList<Char>>,
+    val start: Position,
+    val end: Position,
+)
 
 private typealias PositionWithDirection = Pair<Position, Position>
 
@@ -14,6 +18,11 @@ class Day16 : AocDay<Day202416Input>(
     year = 2024,
 ) {
 
+    private companion object {
+        const val REFRESH_RATE = 20L
+        const val visualize = false
+    }
+
     private val rotations = mapOf(
         AocUtils.Directions.E to listOf(AocUtils.Directions.N, AocUtils.Directions.S),
         AocUtils.Directions.W to listOf(AocUtils.Directions.N, AocUtils.Directions.S),
@@ -21,62 +30,78 @@ class Day16 : AocDay<Day202416Input>(
         AocUtils.Directions.S to listOf(AocUtils.Directions.E, AocUtils.Directions.W),
     )
 
-    private val max = 100000000000L
+    private val directions = rotations.keys.toList()
+
+    private val max = Long.MAX_VALUE
 
     override fun part1(entries: Day202416Input): Long {
-        var start = -1 to -1
-        var end = -1 to -1
-        entries.forEachCell { i, j, c ->
-            when (c) {
-                'S' -> start = i to j
-                'E' -> end = i to j
-            }
-        }
-
-        return findLowestScore(start, end, entries).first
+        return findLowestScore(entries).first
     }
 
     override fun part2(entries: Day202416Input): Int {
-        var start = -1 to -1
-        var end = -1 to -1
-        entries.forEachCell { i, j, c ->
+        val end = entries.end
+        val (minCost, costs) = findLowestScore(entries)
+        val visited = mutableSetOf<PositionWithDirection>()
+        val viz = if (visualize) entries.grid.visualizeNoCopy(
+            cellSize = 7,
+            borderColorMapper = { _, c -> if (c == '#') Color.BLACK else Color(210, 210, 210) },
+            refreshDelay = REFRESH_RATE,
+        ) { _, c ->
             when (c) {
-                'S' -> start = i to j
-                'E' -> end = i to j
+                'S' -> Color(100, 150, 255)
+                'E' -> Color.GREEN
+                '#' -> Color.BLACK
+                '.' -> Color.WHITE
+                'v' -> Color.ORANGE
+                else -> throw IllegalArgumentException("Unsupported")
             }
-        }
-
-        val (minCost, costs) = findLowestScore(start, end, entries)
-        val cleanCosts = costs.filter {
-            val next = it.key.first + it.key.second
-            next.inRange(entries) && entries[next.first][next.second] != '#'
-        }
-        val final = costs.filter { it.key.first == end && it.value == minCost + 1 }.keys
-        val visited = mutableSetOf<Position>()
-        final.forEach { backTrackCount(cleanCosts, it, visited) }
-        return visited.size
+        } else null
+        costs.filter { it.key.first == end && it.value == minCost + 1 }
+            .forEach { backTrack(minCost, costs, it.key, visited, viz) }
+        return visited.map { it.first }.toSet().size
     }
 
-    private fun backTrackCount(
-        cleanCosts: Map<PositionWithDirection, Long>,
+    private fun backTrack(
+        minCost: Long,
+        costs: Map<PositionWithDirection, Long>,
         current: PositionWithDirection,
-        visited: MutableSet<Position>,
+        visited: MutableSet<PositionWithDirection>,
+        viz: GridVisualizer<Char>?,
     ) {
-        if (visited.contains(current.first)) return
-        visited.add(current.first)
-        val next = current.first + current.second
-        val min = cleanCosts.filter { it.key.first == next }
-            .minOf { it.value }
-        cleanCosts.filter { it.key.first == next && it.value == min }
-            .forEach { backTrackCount(cleanCosts, it.key, visited) }
+        if (visited.contains(current)) return
+        val (currentPos, currentD) = current
+        visited += current
+        viz?.let {
+            it.grid[currentPos.first][currentPos.second] = 'v'
+            it.refresh(true)
+        }
+        directions
+            .map { (it + currentPos) to it.negate() } // get neighbours to direction (leading to current)
+            .map { it to costs[it] } // get cost
+            .filter {
+                // has cost (is a candidate) and its cost matches the rule
+                it.second != null && when {
+                    it.second == minCost && it.first.second == currentD -> true // no direction change
+                    it.second == minCost - 1000 && it.first.second != currentD -> true // direction change
+                    else -> false
+                }
+            }
+            .forEach {
+                backTrack(
+                    minCost = if (it.first.second == currentD) minCost - 1 else minCost - 1001,
+                    costs = costs,
+                    current = it.first,
+                    visited = visited,
+                    viz = viz,
+                )
+            }
     }
 
 
-    private fun findLowestScore(
-        start: Position,
-        end: Position,
-        entries: List<List<Char>>,
-    ): Pair<Long, Map<PositionWithDirection, Long>> {
+    private fun findLowestScore(entries: Day202416Input): Pair<Long, Map<PositionWithDirection, Long>> {
+        val start = entries.start
+        val end = entries.end
+        val grid = entries.grid
         val startD = AocUtils.Directions.E
 
         val costs = mutableMapOf<PositionWithDirection, Long>().withDefault { Long.MAX_VALUE }
@@ -97,7 +122,7 @@ class Day16 : AocDay<Day202416Input>(
             if (visited.add(node to cost)) {
                 val (pos, dir) = node
                 val next = dir + pos
-                if (next.inRange(entries) && entries.atPos(next) != '#') {
+                if (next.inRange(grid) && grid.atPos(next) != '#') {
                     if (next == end) {
                         result = min(result, cost)
                     }
@@ -117,7 +142,22 @@ class Day16 : AocDay<Day202416Input>(
     }
 
     override fun convert(file: String): Day202416Input =
-        file.mapLines { _, l -> l.toCharArray().toList() }
+        file.mapLines { _, l -> l.toCharArray().toMutableList() }
+            .let { grid ->
+                var start = -1 to -1
+                var end = -1 to -1
+                grid.forEachCell { i, j, c ->
+                    when (c) {
+                        'S' -> start = i to j
+                        'E' -> end = i to j
+                    }
+                }
+                Day202416Input(
+                    grid = grid,
+                    start = start,
+                    end = end,
+                )
+            }
 
 }
 

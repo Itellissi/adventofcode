@@ -7,20 +7,20 @@ import javax.swing.*
 fun <T> List<List<T>>.visualize(
     refreshDelay: Long = 500,
     cellSize: Int = 5,
-    borderColor: Color = Color.LIGHT_GRAY,
+    borderColorMapper: (Pair<Int, Int>, T) -> Color = { _, _ -> Color.LIGHT_GRAY },
     colorMapper: (Pair<Int, Int>, T) -> Color,
 ): GridVisualizer<T> {
     val copy: List<MutableList<T>> = this.map { it.map { i -> i }.toMutableList() }.toList()
-    return GridVisualizer(copy, cellSize, refreshDelay, borderColor, colorMapper).also { display(it) }
+    return GridVisualizer(copy, cellSize, refreshDelay, borderColorMapper, colorMapper).also { display(it) }
 }
 
 fun <T> List<MutableList<T>>.visualizeNoCopy(
     refreshDelay: Long = 500,
     cellSize: Int = 5,
-    borderColor: Color = Color.LIGHT_GRAY,
+    borderColorMapper: (Pair<Int, Int>, T) -> Color = { _, _ -> Color.LIGHT_GRAY },
     colorMapper: (Pair<Int, Int>, T) -> Color,
 ): GridVisualizer<T> {
-    return GridVisualizer(this, cellSize, refreshDelay, borderColor, colorMapper).also {
+    return GridVisualizer(this, cellSize, refreshDelay, borderColorMapper, colorMapper).also {
         display(it)
     }
 }
@@ -41,7 +41,7 @@ class GridVisualizer<T>(
     val grid: List<MutableList<T>>,
     private val cellSize: Int,
     private val refreshDelay: Long,
-    private val borderColor: Color,
+    private val borderColorMapper: (Pair<Int, Int>, T) -> Color,
     private val colorMapper: (Pair<Int, Int>, T) -> Color,
 ) : JPanel() {
 
@@ -66,7 +66,7 @@ class GridVisualizer<T>(
                 val color = colorMapper(i to j, grid[i][j])
                 g.color = color
                 g.fillRect(j * cellSize, i * cellSize, cellSize, cellSize)
-                g.color = borderColor
+                g.color = borderColorMapper(i to j, grid[i][j])
                 g.drawRect(j * cellSize, i * cellSize, cellSize, cellSize)
             }
         }

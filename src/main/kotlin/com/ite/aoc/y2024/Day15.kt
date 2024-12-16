@@ -39,7 +39,7 @@ class Day15 : AocDay<Day202415Input>(
         val blockColor = Color(200, 120, 0)
         val viz = (if (visualize) gridCopy else null)?.visualizeNoCopy(
             cellSize = 15,
-            borderColor = Color(210, 210, 210),
+            borderColorMapper = { _, _ -> Color(210, 210, 210) },
             refreshDelay = REFRESH_RATE,
         ) { _, c ->
             when (c) {
@@ -97,7 +97,7 @@ class Day15 : AocDay<Day202415Input>(
         val blockColor = Color(200, 120, 0)
         val viz = (if (visualize) expandedGrid else null)?.visualizeNoCopy(
             cellSize = 15,
-            borderColor = Color(210, 210, 210),
+            borderColorMapper = { _, _ -> Color(210, 210, 210) },
             refreshDelay = REFRESH_RATE,
         ) { _, c ->
             when (c) {
