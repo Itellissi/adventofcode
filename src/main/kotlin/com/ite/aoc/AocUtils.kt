@@ -1,6 +1,5 @@
 package com.ite.aoc
 
-import javax.swing.plaf.PanelUI
 import kotlin.math.abs
 
 fun String.readFile() = AocUtils::class.java.getResource(this)?.readText()
@@ -55,6 +54,9 @@ fun Position.negate(): Position = Pair(-this.first, -this.second)
 fun <T> Position.inRange(grid: List<List<T>>) =
     this.first in grid.indices && this.second in grid[this.first].indices
 
+fun Position.inDimension(dimensions: Position) =
+    this.first >= 0 && this.second >= 0 && this.first < dimensions.first && this.second < dimensions.second
+
 fun <T> List<List<T>>.atPos(pos: Position) = this[pos.first][pos.second]
 
 fun Pair<Int, Int>.toLongPair() = this.first.toLong() to this.second.toLong()
@@ -64,6 +66,12 @@ fun Pair<Long, Long>.toIntPair() = this.first.toInt() to this.second.toInt()
 operator fun <T : Number> Pair<T, T>.plus(other: Pair<T, T>): Pair<T, T> = when (this.first) {
     is Long -> (first.toLong() + other.first.toLong() to second.toLong() + other.second.toLong()) as Pair<T, T>
     is Int -> (first.toInt() + other.first.toInt() to second.toInt() + other.second.toInt()) as Pair<T, T>
+    else -> throw UnsupportedOperationException("Plus unsupported for $this")
+}
+
+operator fun <T : Number> Pair<T, T>.minus(other: Pair<T, T>): Pair<T, T> = when (this.first) {
+    is Long -> (first.toLong() - other.first.toLong() to second.toLong() - other.second.toLong()) as Pair<T, T>
+    is Int -> (first.toInt() - other.first.toInt() to second.toInt() - other.second.toInt()) as Pair<T, T>
     else -> throw UnsupportedOperationException("Plus unsupported for $this")
 }
 

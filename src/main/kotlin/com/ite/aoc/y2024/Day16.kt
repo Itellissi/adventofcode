@@ -97,48 +97,18 @@ class Day16 : AocDay<Day202416Input>(
             }
     }
 
-
     private fun findLowestScore(entries: Day202416Input): Pair<Long, Map<PositionWithDirection, Long>> {
-        val start = entries.start
-        val end = entries.end
-        val grid = entries.grid
-        val startD = AocUtils.Directions.E
-
-        val costs = mutableMapOf<PositionWithDirection, Long>().withDefault { Long.MAX_VALUE }
-        val priorityQueue = PriorityQueue<Pair<PositionWithDirection, Long>>(compareBy { it.second })
-        val visited = mutableSetOf<Pair<PositionWithDirection, Long>>()
-
-        priorityQueue.add(start to startD to 1)
-        costs[start to startD] = 1
-        rotations[startD]!!.forEach {
-            costs[start to it] = 1001
-            priorityQueue.add(start to it to 1001)
-        }
-
-        var result = max
-
-        while (priorityQueue.isNotEmpty()) {
-            val (node, cost) = priorityQueue.poll()
-            if (visited.add(node to cost)) {
-                val (pos, dir) = node
-                val next = dir + pos
-                if (next.inRange(grid) && grid.atPos(next) != '#') {
-                    if (next == end) {
-                        result = min(result, cost)
-                    }
-                    val pathToScores = rotations[dir]!!.map { it to 1001 } + (dir to 1)
-                    pathToScores.forEach { (nextDir, weight) ->
-                        val totalCost = cost + weight
-                        if (totalCost < costs.getValue(next to nextDir)) {
-                            costs[next to nextDir] = totalCost
-                            priorityQueue.add(next to nextDir to totalCost)
-                        }
-                    }
-                }
+        return dijkstra(
+            startCosts = listOf((entries.start to AocUtils.Directions.E) to 1L) + rotations[AocUtils.Directions.E]!!.map { entries.start to it to 1001L },
+            isFinal = { n -> n.first == entries.end },
+            pathCost = { p, n -> if (p.second == n.second) 1 else 1001 },
+        ) { (pos, dir) ->
+            val next = dir + pos
+            when {
+                next.inRange(entries.grid) && entries.grid.atPos(next) != '#' -> listOf(next to dir) + rotations[dir]!!.map { next to it }
+                else -> emptyList()
             }
         }
-
-        return result to costs
     }
 
     override fun convert(file: String): Day202416Input =
