@@ -1,7 +1,6 @@
 package com.ite.aoc.y2024
 
 import com.ite.aoc.AocDay
-import com.ite.aoc.Position
 import com.ite.aoc.mapLines
 import kotlin.math.min
 

@@ -2,7 +2,7 @@ package com.ite.aoc.y2024
 
 import com.ite.aoc.*
 import java.awt.Color
-import java.util.LinkedList
+import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
 private typealias Day202410Input = Pair<List<List<Int>>, List<Position>>

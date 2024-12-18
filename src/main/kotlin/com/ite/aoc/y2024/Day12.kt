@@ -2,7 +2,6 @@ package com.ite.aoc.y2024
 
 import com.ite.aoc.*
 import java.awt.Color
-import kotlin.random.Random
 
 private typealias Day202412Input = List<List<Char>>
 

@@ -2,8 +2,6 @@ package com.ite.aoc.y2024
 
 import com.ite.aoc.*
 import java.awt.Color
-import java.util.*
-import kotlin.math.min
 
 data class Day202416Input(
     val grid: List<MutableList<Char>>,
