@@ -47,6 +47,8 @@ fun <T> List<List<T>>.printGrid(marker: (Int, Int, T) -> String = { _, _, c -> c
         }
     }
 
+fun Position.distance(other: Position) = (this - other).let { abs(it.first) + abs(it.second) }
+
 fun Position.navigate(currentPos: Position): Position = this + currentPos
 
 fun Position.negate(): Position = Pair(-this.first, -this.second)
