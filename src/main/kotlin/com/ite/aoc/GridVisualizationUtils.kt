@@ -38,7 +38,7 @@ private fun <T> display(it: GridVisualizer<T>) {
 }
 
 class GridVisualizer<T>(
-    val grid: List<MutableList<T>>,
+    var grid: List<MutableList<T>>,
     private val cellSize: Int,
     private val refreshDelay: Long,
     private val borderColorMapper: (Pair<Int, Int>, T) -> Color,
