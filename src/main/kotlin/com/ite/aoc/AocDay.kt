@@ -9,6 +9,7 @@ import kotlin.time.measureTime
 abstract class AocDay<T>(
     year: Int,
     day: Int,
+    val withFile: Boolean = true,
 ) {
     protected val file = "/input/$year/day${day.toString().padStart(2, '0')}.txt"
 
@@ -20,11 +21,13 @@ abstract class AocDay<T>(
 
     fun solve(copyResult: Boolean = false, part: Int? = null, test: Boolean = false) {
         val file = this.file + (if (test) ".tst" else "")
-        val inputFile = File("src/main/resources$file")
-        if (!inputFile.exists()) {
-            inputFile.parentFile.mkdirs()
-            inputFile.createNewFile()
-            exitProcess(1)
+        if (withFile) {
+            val inputFile = File("src/main/resources$file")
+            if (!inputFile.exists()) {
+                inputFile.parentFile.mkdirs()
+                inputFile.createNewFile()
+                exitProcess(1)
+            }
         }
         val entries = convert(file)
         val result1 = Result(null)

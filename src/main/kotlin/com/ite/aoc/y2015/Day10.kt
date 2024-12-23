@@ -8,6 +8,7 @@ private typealias Day201510Input = String
 class Day10 : AocDay<Day201510Input>(
     day = 10,
     year = 2015,
+    withFile = false,
 ) {
 
     override fun part1(entries: Day201510Input): Int {
@@ -18,9 +19,9 @@ class Day10 : AocDay<Day201510Input>(
         return resolve(entries, 50)
     }
 
-    private fun resolve(entries: Day201510Input, count: Int): Int {
+    private fun resolve(entries: Day201510Input, times: Int): Int {
         var current = entries.toCharArray().toList()
-        repeat(count) {
+        repeat(times) {
             val next = mutableListOf<Char>()
             var count = 0
             var prev = current.first()
