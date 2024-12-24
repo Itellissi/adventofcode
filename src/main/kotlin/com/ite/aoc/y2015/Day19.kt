@@ -24,20 +24,26 @@ class Day19 : AocDay<Day201519Input>(
     }
 
     override fun part2(entries: Day201519Input): Int {
-        val target = entries.input
-        return find("e", target, entries.mappings, 0)
+        var current = entries.input
+        var count = 0
+        // e -> XY
+        // XY -> (AB)(CD)
+        // ...
+        // starting from the end in reverse is the way to go
+        while (current != "e") {
+            val lastMapping = entries.mappings.maxBy { m -> current.lastIndexOf(m.second) }
+
+            val idx = current.lastIndexOf(lastMapping.second)
+            if (idx >= 0) {
+                current = replaceAt(current, idx, lastMapping.second, lastMapping.first)
+                count++
+            }
+        }
+        return count
     }
 
-    private fun find(current: String, target: String, mappings: List<Pair<String, String>>, steps: Int): Int {
-        when {
-            current.length > target.length -> return Int.MAX_VALUE
-            current == target -> return steps
-        }
-        return mappings.flatMap { getCalibrations(current, it) }
-            .sortedBy { it.length }
-            .toSet()
-            .minOf { find(it, target, mappings, steps + 1) }
-    }
+    private fun replaceAt(current: String, idx: Int, old: String, new: String) =
+        current.substring(0, idx) + new + current.substring(idx + old.length)
 
     private fun getCalibrations(
         input: String,
@@ -47,7 +53,7 @@ class Day19 : AocDay<Day201519Input>(
         var pos = input.indexOf(m.first)
         val result = mutableSetOf<String>()
         while (pos != -1) {
-            result += input.substring(0, pos) + m.second + input.substring(pos + m.first.length)
+            result += replaceAt(input, pos, m.first, m.second)
             idx = pos + m.first.length
             pos = input.indexOf(m.first, idx)
         }
