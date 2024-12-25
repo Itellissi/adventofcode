@@ -1,7 +1,6 @@
 package com.ite.aoc.y2024
 
 import com.ite.aoc.*
-import kotlin.math.abs
 
 data class Day202418Input(
     val dimension: Position,

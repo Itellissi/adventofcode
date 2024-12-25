@@ -2,8 +2,6 @@ package com.ite.aoc.y2015
 
 import com.ite.aoc.AocDay
 import com.ite.aoc.mapLines
-import java.util.LinkedList
-import java.util.UUID
 
 private typealias Day201517Input = List<CupContainer>
 

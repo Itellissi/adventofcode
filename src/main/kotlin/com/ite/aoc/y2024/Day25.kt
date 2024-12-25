@@ -1,7 +1,6 @@
 package com.ite.aoc.y2024
 
 import com.ite.aoc.AocDay
-import com.ite.aoc.atPos
 import com.ite.aoc.mapLines
 
 private typealias Day202425Input = List<List<List<Char>>>

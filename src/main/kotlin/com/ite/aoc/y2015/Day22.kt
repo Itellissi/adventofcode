@@ -1,7 +1,6 @@
 package com.ite.aoc.y2015
 
 import com.ite.aoc.AocDay
-import com.ite.aoc.mapLines
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.max
 

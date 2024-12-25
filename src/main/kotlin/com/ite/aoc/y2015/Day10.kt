@@ -1,7 +1,6 @@
 package com.ite.aoc.y2015
 
 import com.ite.aoc.AocDay
-import com.ite.aoc.mapLines
 
 private typealias Day201510Input = String
 

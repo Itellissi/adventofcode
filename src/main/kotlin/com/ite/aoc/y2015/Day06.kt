@@ -3,8 +3,6 @@ package com.ite.aoc.y2015
 import com.ite.aoc.AocDay
 import com.ite.aoc.Position
 import com.ite.aoc.mapLines
-import com.ite.aoc.visualize
-import java.awt.Color
 import kotlin.math.max
 import kotlin.math.min
 
