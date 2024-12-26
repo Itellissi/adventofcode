@@ -1,5 +1,6 @@
 package com.ite.aoc
 
+import java.security.MessageDigest
 import kotlin.math.abs
 
 fun String.readFile() = AocUtils::class.java.getResource(this)?.readText()
@@ -120,5 +121,13 @@ class AocUtils {
             return area == 0
         }
 
+    }
+
+    object Crypto {
+
+        private val md = MessageDigest.getInstance("MD5")
+
+        @OptIn(ExperimentalStdlibApi::class)
+        fun md5(value: String) = md.digest(value.toByteArray()).toHexString()
     }
 }

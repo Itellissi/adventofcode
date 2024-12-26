@@ -1,6 +1,7 @@
 package com.ite.aoc.y2015
 
 import com.ite.aoc.AocDay
+import com.ite.aoc.AocUtils
 import com.ite.aoc.mapLines
 import java.security.MessageDigest
 
@@ -22,10 +23,9 @@ class Day04 : AocDay<Day201504Input>(
     @OptIn(ExperimentalStdlibApi::class)
     private fun find(prefix: String): Int {
         val input = "ckczppom"
-        val md = MessageDigest.getInstance("MD5")
         (1..100000000).forEach { i ->
-            val digest = md.digest("$input$i".toByteArray())
-            if (digest.toHexString().startsWith(prefix)) {
+            val digest = AocUtils.Crypto.md5("$input$i")
+            if (digest.startsWith(prefix)) {
                 return i
             }
         }
